@@ -103,18 +103,31 @@ What additional analyses or data sources would better help you refine your argum
 ## Question 1:
 
 - Describe the data set: what are the columns and units? Where do the numbers come from? 
-- What is the uncertainty in measurment? Resolution of the data? Interpretation of missing values?
-
+The data set represents the amount Antarctic and Greenland ice mass per year. The mass of the ice is measured in gigatons per year. The columns are year, Anarctic mass, and Greenland ice mass. The data comes from NASA's GRACE and GRACE follow-on satellites.
+- What is the uncertainty in measurement? Resolution of the data? Interpretation of missing values?
+The data points have a margin of uncertainty of about 27 to 60 Gt at each measurement point. There is missing data from the years 2017 to June of 2018 due to the cessation of the initial GRACE mission. 
 
 ## Question 2:
 
 Construct the necessary R code to import this data set as a tidy `Table` object.
+```{r}
+ice<- read_csv("http://climate.nasa.gov/system/internal_resources/details/original/499_GRN_ANT_mass_changes.csv",
+               skip=10,
+               col_names=c("decimal_date", "Greenland_mass", "Antarctic_mass"),
+               col_types="ddd")
+ice
+```
+
 
 ## Question 3:
 
 Plot the data and describe the trends you observe.
 
-
+```{r}
+ggplot(ice, aes(x= decimal_date, y= Greenland_mass))+geom_line()
+ggplot(ice, aes(x= decimal_date, y= Antarctic_mass))+ geom_line()
+```
+Both plots display small seasonal variations in ice mass as ice melts in the spring and reforms in the winter. However, both plots display an overall decline in ice mass. The Greenland ice mass appears to follow a fairly regular decline, while the Antarctic ice mass data has greater variation. Additionally, the rate of change for the Greenland ice is almost twice as fast as that of the Antarctic ice. 
 
 # Exercise III: Rising Sea Levels?
 
