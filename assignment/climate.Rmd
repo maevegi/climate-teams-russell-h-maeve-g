@@ -1,6 +1,11 @@
 ---
+<<<<<<< HEAD
 title: "Changing Climate Indicators"
 author: "Maeve Gilbert"
+=======
+title: "Climate Indicators"
+author: "Maeve Gilbert & Russell Huang"
+>>>>>>> 7137f79 (WIP Exercise 3 Q2 :cry:)
 output: github_document
 ---
 
@@ -24,7 +29,12 @@ read_table("https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_mm_mlo.txt",
                   comment="#",
                   col_names = c("year", "month", "decimal_date", "monthly_average",
                                 "interpolated", "days", "std", "uncertainty"),
+<<<<<<< HEAD
                   na = c("-1", "-99.99", "-0.99"))
+=======
+                  na = c("-1", "-9.99", "-0.99"),
+           col_types = "iidddddd")
+>>>>>>> 7137f79 (WIP Exercise 3 Q2 :cry:)
 co2
 ```
 
@@ -138,13 +148,30 @@ Both plots display small seasonal variations in ice mass as ice melts in the spr
 ## Question 1:
 
 - Describe the data set: what are the columns and units? 
+This table is measuring the Global Mean Sea Level (GMSL) variation
+3,  12
+
+HDR
 - Where do these data come from? 
+
 - What is the uncertainty in measurment? Resolution of the data? Interpretation of missing values?
 
 
 ## Question 2:
 
 Construct the necessary R code to import this data set as a tidy `Table` object.
+
+```{r}
+
+sea_level <-
+#read_table ("http://climate.nasa.gov/system/internal_resources/details/original/121_Global_Sea_Level_Data_File.txt",
+#            skip = 21,
+#           comment = "HDR",
+#            col_names = c("baba", "caca", "decimal_year", "yaya", "papa", "haha", "lala", "iaia", "uaua", "tata", "wawa", "sea_level_variation"),
+#cols_only("decimal_year","sea_level_variation")
+sea_level
+```
+
 
 ## Question 3:
 
