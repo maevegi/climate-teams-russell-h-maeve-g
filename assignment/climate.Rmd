@@ -26,14 +26,9 @@ read_table("https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_mm_mlo.txt",
                   comment="#",
                   col_names = c("year", "month", "decimal_date", "monthly_average",
                                 "interpolated", "days", "std", "uncertainty"),
-<<<<<<< HEAD
                   na = c("-1", "-9.99", "-0.99"),
            col_types = "iidddddd")
-=======
-                  na = c("-1", "-99.99", "-0.99"),
-           col_types="iidddddd")
->>>>>>> d8d7886 (exercise III question 2)
-co2
+
 ```
 
 
@@ -71,10 +66,10 @@ The only obvious gap in data is temperature data pre-1880.
 
 Construct the necessary R code to import and prepare for manipulation the following data set: <http://climate.nasa.gov/system/internal_resources/details/original/647_Global_Temperature_Data_File.txt>
 ```{r}
-globaltemp<-
+global_temp<-
 read_table("https://data.giss.nasa.gov/gistemp/graphs/graph_data/Global_Mean_Estimates_based_on_Land_and_Ocean_Data/graph.txt",
            skip=5, 
-           col_names= c("Year", "Annual_mean", "Lowess_smoothing"))
+           col_names= c("year", "annual_mean", "lowess_smoothing"))
 globaltemp
 ```
 
@@ -82,6 +77,12 @@ globaltemp
 ## Question 3:
 
 Plot the trend in global mean temperatures over time.  Describe what you see in the plot and how you interpret the patterns you observe.
+```{r}
+ggplot(global_temp, aes(x=year))+
+         geom_line(mapping=aes(y=annual_mean), col="red")+
+         geom_line(mapping=aes(y=lowess_smoothing), col="blue")
+```
+The graph plots the the annual mean temperature from 1880 to the present. The red line represents the annual mean temperature, while the blue line represents the Lowess smoothing. The data fluctuates consistently between 1880 to around 1930, generally decreasing. However, at around 1930 the mean temperature variation sharply increased, likely due to increased CO2 emissions from intensified production during the two world wars. After this period, the annual mean temperature continued increasing.  
 
 
 ## Question 4: Evaluating the evidence for a "Pause" in warming?
@@ -157,12 +158,10 @@ HDR
 
 - What is the uncertainty in measurment? Resolution of the data? Interpretation of missing values?
 
-=======
+
 The data 
 - Where do these data come from? 
 
->>>>>>> d8d7886 (exercise III question 2)
-- What is the uncertainty in measurement? Resolution of the data? Interpretation of missing values?
 
 
 
@@ -171,24 +170,14 @@ The data
 Construct the necessary R code to import this data set as a tidy `Table` object.
 ```{r}
 sea_level<-read_table("http://climate.nasa.gov/system/internal_resources/details/original/121_Global_Sea_Level_Data_File.txt",
-<<<<<<< HEAD
+
                       skip=30,
                       comment="HDR",
                       col_names=c("a", "b", "decimal_date","c", "d",
                       "e", "f", "g", "h", "i", "j", "height_variation"),
                       show_col_types=TRUE)
 sea_level<-select(sea_level, decimal_date, height_variation)
-test
-=======
-                      skip=23,
-                      comment= "HDR",
-                      col_names=c("a", "b", "decimal_date","d", "e", "f", "g", "h", 
-                                  "i", "j", "k","height_variation"),
-                      col_types="ccdccccccccd")
 
-                    
-sea_level
->>>>>>> d8d7886 (exercise III question 2)
 ```
 
 
