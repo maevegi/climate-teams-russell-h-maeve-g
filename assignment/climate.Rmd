@@ -26,8 +26,13 @@ read_table("https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_mm_mlo.txt",
                   comment="#",
                   col_names = c("year", "month", "decimal_date", "monthly_average",
                                 "interpolated", "days", "std", "uncertainty"),
+<<<<<<< HEAD
                   na = c("-1", "-9.99", "-0.99"),
            col_types = "iidddddd")
+=======
+                  na = c("-1", "-99.99", "-0.99"),
+           col_types="iidddddd")
+>>>>>>> d8d7886 (exercise III question 2)
 co2
 ```
 
@@ -58,7 +63,7 @@ Describe the data set to the best of your ability given the documentation provid
 - How are the measurements made? What is the associated measurement uncertainty?
 The measurements are collected from NASA's Goddard Institute Institute for Space studies. The data includes the global average surface temperature from 1880 to 2022. The measurements are made as the hange in surface temrpature compared to the average from 1951 to 1980. The measurement uncertainty is Lowess smoothing, which averages the data.
 - What is the resolution of the data?
-The data is measured in annual mean temperature in Celsisus. 
+The data is measured in annual mean temperature in Celsius. 
 - Are their missing values? How should they be handled?
 The only obvious gap in data is temperature data pre-1880. 
 
@@ -105,7 +110,8 @@ What additional analyses or data sources would better help you refine your argum
 ## Question 1:
 
 - Describe the data set: what are the columns and units? Where do the numbers come from? 
-The data set represents the amount Antarctic and Greenland ice mass per year. The mass of the ice is measured in gigatons per year. The columns are year, Anarctic mass, and Greenland ice mass. The data comes from NASA's GRACE and GRACE follow-on satellites.
+The data set represents the amount Antarctic and Greenland ice mass per year. The mass of the ice is measured in gigatons per year. The columns are year, Antarctic mass, and Greenland ice mass. The data comes from NASA's GRACE and GRACE follow-on satellites.
+
 - What is the uncertainty in measurement? Resolution of the data? Interpretation of missing values?
 The data points have a margin of uncertainty of about 27 to 60 Gt at each measurement point. There is missing data from the years 2017 to June of 2018 due to the cessation of the initial GRACE mission. 
 
@@ -141,6 +147,7 @@ Both plots display small seasonal variations in ice mass as ice melts in the spr
 ## Question 1:
 
 - Describe the data set: what are the columns and units? 
+<<<<<<< HEAD
 This table is measuring the Global Mean Sea Level (GMSL) variation
 3,  12
 
@@ -150,6 +157,11 @@ HDR
 
 - What is the uncertainty in measurment? Resolution of the data? Interpretation of missing values?
 
+=======
+The data 
+- Where do these data come from? 
+
+>>>>>>> d8d7886 (exercise III question 2)
 - What is the uncertainty in measurement? Resolution of the data? Interpretation of missing values?
 
 
@@ -159,6 +171,7 @@ HDR
 Construct the necessary R code to import this data set as a tidy `Table` object.
 ```{r}
 sea_level<-read_table("http://climate.nasa.gov/system/internal_resources/details/original/121_Global_Sea_Level_Data_File.txt",
+<<<<<<< HEAD
                       skip=30,
                       comment="HDR",
                       col_names=c("a", "b", "decimal_date","c", "d",
@@ -166,12 +179,27 @@ sea_level<-read_table("http://climate.nasa.gov/system/internal_resources/details
                       show_col_types=TRUE)
 sea_level<-select(sea_level, decimal_date, height_variation)
 test
+=======
+                      skip=23,
+                      comment= "HDR",
+                      col_names=c("a", "b", "decimal_date","d", "e", "f", "g", "h", 
+                                  "i", "j", "k","height_variation"),
+                      col_types="ccdccccccccd")
+
+                    
+sea_level
+>>>>>>> d8d7886 (exercise III question 2)
 ```
 
 
 ## Question 3:
 
 Plot the data and describe the trends you observe.
+```{r}
+ggplot(data=sea_level)+
+geom_line(mapping=aes(x=decimal_date, y=height_variation))
+  
+```
 
 
 
