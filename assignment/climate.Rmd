@@ -1,7 +1,5 @@
 ---
 title: "Changing Climate Indicators"
-author: "Maeve Gilbert"
-title: "Climate Indicators"
 author: "Maeve Gilbert & Russell Huang"
 output: github_document
 ---
