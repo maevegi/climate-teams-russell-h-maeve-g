@@ -221,7 +221,7 @@ Plot the data and describe the trends you observe.
 ```{r}
 ggplot(arctic_ice)+
 geom_point(mapping=aes(x=year, y=extent))
-select(year, extent)
+
 ```
 
 
