@@ -68,7 +68,7 @@ global_temp<-
 read_table("https://data.giss.nasa.gov/gistemp/graphs/graph_data/Global_Mean_Estimates_based_on_Land_and_Ocean_Data/graph.txt",
            skip=5, 
            col_names= c("year", "annual_mean", "lowess_smoothing"))
-globaltemp
+global_temp
 ```
 
 
@@ -205,10 +205,24 @@ geom_line(mapping=aes(x=decimal_date, y=height_variation))
 ## Question 2:
 
 Construct the necessary R code to import this data set as a tidy `Table` object.
+```{r}
+arctic_ice <- read_csv("ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/N_seaice_extent_daily_v3.0.csv",
+                     skip=2,
+                     col_names=c("year", "month", "day", "extent", "missing",
+                                 "source"),
+                     col_types= c("iiiddc"))
+arctic_ice
+```
+
 
 ## Question 3:
 
 Plot the data and describe the trends you observe.    
+```{r}
+ggplot(arctic_ice)+
+geom_point(mapping=aes(x=year, y=extent))
+select(year, extent)
+```
 
 
 # Exercise V: Longer term trends in CO2 Records
