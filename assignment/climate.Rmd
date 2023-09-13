@@ -26,7 +26,15 @@ read_table("https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_mm_mlo.txt",
                                 "interpolated", "days", "std", "uncertainty"),
                   na = c("-1", "-9.99", "-0.99"),
            col_types = "iidddddd")
-co2
+
+```
+
+
+```{r}
+co2|> pivot_longer(c("monthly_average", "interpolated"), values_to="co2", names_to="type")|>
+ggplot(aes(x = decimal_date, y = co2, col=type)) +
+  geom_line()+ theme_bw()
+
 ```
 
 Which months are the CO2 values at the maximum? Minimum?  Why is this?
@@ -57,9 +65,9 @@ The only obvious gap in data is temperature data pre-1880.
 Construct the necessary R code to import and prepare for manipulation the following data set: <http://climate.nasa.gov/system/internal_resources/details/original/647_Global_Temperature_Data_File.txt>
 
 ```{r}
-global_temp <- 
-read_table("http://climate.nasa.gov/system/internal_resources/details/original/647_Global_Temperature_Data_File.txt",
-           skip=5,
+global_temp<-
+read_table("https://data.giss.nasa.gov/gistemp/graphs/graph_data/Global_Mean_Estimates_based_on_Land_and_Ocean_Data/graph.txt",
+           skip=5, 
            col_names= c("year", "annual_mean", "lowess_smoothing"))
 global_temp
 ```
@@ -68,6 +76,12 @@ global_temp
 ## Question 3:
 
 Plot the trend in global mean temperatures over time.  Describe what you see in the plot and how you interpret the patterns you observe.
+```{r}
+ggplot(global_temp, aes(x=year))+
+         geom_line(mapping=aes(y=annual_mean), col="red")+
+         geom_line(mapping=aes(y=lowess_smoothing), col="blue")
+```
+The graph plots the the annual mean temperature from 1880 to the present. The red line represents the annual mean temperature, while the blue line represents the Lowess smoothing. The data fluctuates consistently between 1880 to around 1930, generally decreasing. However, at around 1930 the mean temperature variation sharply increased, likely due to increased CO2 emissions from intensified production during the two world wars. After this period, the annual mean temperature continued increasing.  
 
 
 
@@ -95,6 +109,7 @@ What additional analyses or data sources would better help you refine your argum
 ## Question 1:
 
 - Describe the data set: what are the columns and units? Where do the numbers come from? 
+The data set represents the amount Antarctic and Greenland ice mass per year. The mass of the ice is measured in gigatons per year. The columns are year, Antarctic mass, and Greenland ice mass. The data comes from NASA's GRACE and GRACE follow-on satellites.
 
 - What is the uncertainty in measurement? Resolution of the data? Interpretation of missing values?
 
@@ -119,9 +134,9 @@ Plot the data and describe the trends you observe.
 
 
 ```{r}
-ggplot(ice, aes(x=decimal_date))+
-geom_line(aes(y=greenland_mass), col="blue")+
-geom_line(aes(y=antartic_mass), col="purple")
+ggplot(ice, mapping=aes(x= decimal_date))+
+geom_line(mapping=aes(x=decimal_date, y= Greenland_mass, color=Greenland_mass))+
+geom_line(mapping=aes(x=decimal_date, y= Antarctic_mass, color=Antarctic_mass))
 ```
 
 
@@ -136,22 +151,45 @@ Both plots display small seasonal variations in ice mass as ice melts in the spr
 ## Question 1:
 
 - Describe the data set: what are the columns and units? 
+This table is measuring the Global Mean Sea Level (GMSL) variation
+
 
 - Where do these data come from? 
 
+
 - What is the uncertainty in measurment? Resolution of the data? Interpretation of missing values?
+
+
+The data 
+- Where do these data come from? 
+
+
 
 
 ## Question 2:
 
 Construct the necessary R code to import this data set as a tidy `Table` object.
+```{r}
+sea_level<-read_table("http://climate.nasa.gov/system/internal_resources/details/original/121_Global_Sea_Level_Data_File.txt",
 
-
+                      skip=30,
+                      comment="HDR",
+                      col_names=c("a", "b", "decimal_date","c", "d",
+                      "e", "f", "g", "h", "i", "j", "height_variation"),
+                      show_col_types=TRUE)
+sea_level<-select(sea_level, decimal_date, height_variation)
+sea_level
+```
 
 
 ## Question 3:
 
 Plot the data and describe the trends you observe.
+```{r}
+ggplot(data=sea_level)+
+geom_line(mapping=aes(x=decimal_date, y=height_variation))
+  
+```
 
 
 
@@ -171,10 +209,24 @@ Plot the data and describe the trends you observe.
 ## Question 2:
 
 Construct the necessary R code to import this data set as a tidy `Table` object.
+```{r}
+arctic_ice <- read_csv("ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/N_seaice_extent_daily_v3.0.csv",
+                     skip=2,
+                     col_names=c("year", "month", "day", "extent", "missing",
+                                 "source"),
+                     col_types= c("iiiddc"))
+arctic_ice
+```
+
 
 ## Question 3:
 
 Plot the data and describe the trends you observe.    
+```{r}
+ggplot(arctic_ice)+
+geom_point(mapping=aes(x=year, y=extent))
+
+```
 
 
 # Exercise V: Longer term trends in CO2 Records
@@ -194,11 +246,12 @@ Vostok Core, back to 400,000 yrs before present day
 
 - Description of data set: <http://cdiac.esd.ornl.gov/trends/co2/vostok.html>
 - Data source: <http://cdiac.ornl.gov/ftp/trends/co2/vostok.icecore.co2>
+https://www.ncei.noaa.gov/pub/data/paleo/icecore/antarctica/vostok/vostok_co2.txt
 
 ## Questions / Tasks:
 
 - Describe the data set: what are the columns and units? Where do the numbers come from? 
-- What is the uncertainty in measurment? Resolution of the data? Interpretation of missing values?
+- What is the uncertainty in measurement? Resolution of the data? Interpretation of missing values?
 - Read in and prepare data for analysis.
 - Reverse the ordering to create a chronological record.  
 - Plot data
