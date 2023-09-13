@@ -148,9 +148,8 @@ Both plots display small seasonal variations in ice mass as ice melts in the spr
 ## Question 1:
 
 - Describe the data set: what are the columns and units? 
-<<<<<<< HEAD
 This table is measuring the Global Mean Sea Level (GMSL) variation
-3,  12
+
 
 HDR
 - Where do these data come from? 
@@ -177,7 +176,7 @@ sea_level<-read_table("http://climate.nasa.gov/system/internal_resources/details
                       "e", "f", "g", "h", "i", "j", "height_variation"),
                       show_col_types=TRUE)
 sea_level<-select(sea_level, decimal_date, height_variation)
-
+sea_level
 ```
 
 
