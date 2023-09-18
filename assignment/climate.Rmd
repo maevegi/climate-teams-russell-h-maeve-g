@@ -190,24 +190,14 @@ arctic_ice |>
   ggplot(aes(year, mean_extent)) + geom_line()
 ```
 In general, there is an overall decrease in Arctic sea ice surface area. However, there are fluctuations in the data which could be attributed to fluctuations in global climate. For example, the past ten years have been some of the hottest on record. These higher tempertures would mean more sea ice would melt, contributing to these sharp decreases in mean ice extent. There also seems to be a sharp increase in the amount of sea ice in the past three years. 
-# Exercise V: Longer term trends in CO2 Records
 
+# Exercise V: Longer term trends in CO2 Records
 
 The data we analyzed in the unit introduction included CO2 records dating back only as far as the measurements at the Manua Loa observatory.  To put these values into geological perspective requires looking back much farther than humans have been monitoring atmosopheric CO2 levels.  To do this, we need another approach.
 
 [Ice core data](http://cdiac.ornl.gov/trends/co2/ice_core_co2.html):
 
 Vostok Core, back to 400,000 yrs before present day 
-```{r}
-install.packages("XML")
-
-library("XML")
-library("methods")
-
-#data <- xmlParse(file = "Vostok_Ice_Core.xml")
-
-print(data)
-```
 
 - Description of data set: <http://cdiac.esd.ornl.gov/trends/co2/vostok.html>
 - Data source: <http://cdiac.ornl.gov/ftp/trends/co2/vostok.icecore.co2>
@@ -221,6 +211,15 @@ https://www.ncei.noaa.gov/pub/data/paleo/icecore/antarctica/vostok/vostok_co2.tx
 - What is the uncertainty in measurement? Resolution of the data? Interpretation of missing values?
 
 - Read in and prepare data for analysis.
+```{r}
+test<- read_table("https://www.ncei.noaa.gov/pub/data/paleo/icecore/antarctica/vostok/co2-noaa.txt",
+                  comment="#", 
+                  skip=1,
+                  col_names=c("meter_depth", "ice_age", "gas_age", "CO2_mean", "CO2_max",
+                              "CO2_min"))
+test
+```
+
 ```{r}
 vostok_co2 <-
 read_table("https://www.ncei.noaa.gov/pub/data/paleo/icecore/antarctica/vostok/vostok_co2.txt",
