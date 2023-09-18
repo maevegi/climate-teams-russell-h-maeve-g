@@ -113,7 +113,7 @@ ice_original <- read_csv("http://climate.nasa.gov/system/internal_resources/deta
 ice_original
 ```
 ```{r}
-ice_new<-ice%>%
+ice_new<-ice_original%>%
   pivot_longer(greenland_mass:antarctic_mass, values_to="ice_mass", names_to="location")
 ice_new
 ```
