@@ -131,22 +131,7 @@ The above data is listed as a table differentiated by the year plotted against G
 
 
 ## Question 1:
-
-- Describe the data set: what are the columns and units? 
-This table is measuring the Global Mean Sea Level (GMSL) variation
-
-
-- Where do these data come from? 
-
-
-- What is the uncertainty in measurment? Resolution of the data? Interpretation of missing values?
-
-
-The data 
-- Where do these data come from? 
-
-
-
+This table is measuring the Global Mean Sea Level (GMSL) variation measured in millimeters every month from 1993 until the present. The data was gathered by the NASA Goddard Space Flight Center and represents a compilation of teh Sea Surace Heights from multiple satelittes. The original data file contains twelve different columns, including the year, number of obseravations, weighted observations, and mutiple GMSL measurements with different filters applied. For the purposes of our observations, we used the data on the time that the observation was collected, and the the smooth GMSL variation with the annual and semi-annual signal removed. We chose this data column because it was the same as that used by NASA in their figures. 
 
 ## Question 2:
 
@@ -158,21 +143,18 @@ sea_level<-read_table("http://climate.nasa.gov/system/internal_resources/details
                       comment="HDR",
                       col_names=c("a", "b", "decimal_date","c", "d",
                       "e", "f", "g", "h", "i", "j", "height_variation"),
-                      show_col_types=TRUE)
+                      show_col_types=FALSE)
 sea_level<-select(sea_level, decimal_date, height_variation)
 sea_level
 ```
-
 
 ## Question 3:
 
 Plot the data and describe the trends you observe.
 ```{r}
 ggplot(data=sea_level)+
-geom_line(mapping=aes(x=decimal_date, y=height_variation))
+geom_line(mapping=aes(x=decimal_date, y=height_variation), color="orange")
 ```
-
-
 
 # Exercise IV: Arctic Sea Ice?
 
@@ -183,11 +165,7 @@ geom_line(mapping=aes(x=decimal_date, y=height_variation))
 ## Question 1:
 
 - Describe the data set: what are the columns and units? 
-
-- Where do these data come from? 
-
-- What is the uncertainty in measurement? Resolution of the data? Interpretation of missing values?
-
+This data set represents the amount of Arctic sea ice from 1978 to the present. The temporal resolution is 1 day, and the spatial resolution is 25 by 25 km. The data is collected from various sensors operated by the National Snow and Ice Data Center. However, it should be noted that the data is best observed on a monthly scale rather than daily because monthly averages will average errors in the data and represent long-term weather more accurately than daily weather variations. 
 
 ## Question 2:
 
@@ -211,8 +189,7 @@ arctic_ice |>
   summarise(mean_extent = mean(extent)) |>
   ggplot(aes(year, mean_extent)) + geom_line()
 ```
-
-
+In general, there is an overall decrease in Arctic sea ice surface area. However, there are fluctuations in the data which could be attributed to fluctuations in global climate. For example, the past ten years have been some of the hottest on record. These higher tempertures would mean more sea ice would melt, contributing to these sharp decreases in mean ice extent. There also seems to be a sharp increase in the amount of sea ice in the past three years. 
 # Exercise V: Longer term trends in CO2 Records
 
 
