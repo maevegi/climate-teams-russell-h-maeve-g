@@ -212,44 +212,24 @@ https://www.ncei.noaa.gov/pub/data/paleo/icecore/antarctica/vostok/vostok_co2.tx
 
 - Read in and prepare data for analysis.
 ```{r}
-test<- read_table("https://www.ncei.noaa.gov/pub/data/paleo/icecore/antarctica/vostok/co2-noaa.txt",
+vostok<- read_table("https://www.ncei.noaa.gov/pub/data/paleo/icecore/antarctica/vostok/co2-noaa.txt",
                   comment="#", 
-                  skip=1,
-                  col_names=c("meter_depth", "ice_age", "gas_age", "CO2_mean", "CO2_max",
-                              "CO2_min"))
-test
+                  skip=4,
+                  show_col_types=FALSE)%>%
+                  arrange(desc(gas_ageBP))
+vostok
 ```
 
 ```{r}
-vostok_co2 <-
-read_table("https://www.ncei.noaa.gov/pub/data/paleo/icecore/antarctica/vostok/vostok_co2.txt",
-          skip = 76,
-          col_names = c("meter_depth", "year_depth", "air_age", "air_age_error", "co2_ave", "co2_sigma", "date", "no_samples"))
-          arrange(vostok_co2, desc("year_depth"))
-vostok_co2  
-```
-
-
-- Reverse the ordering to create a chronological record.  
-
-- Plot data
-```{r}
-#ggplot(data = vostok_co2, x = year_depth, y = air_age_error) +
-#geom_line(mapping = aes(x = year_depth, y = air_age_error)) + 
-  
-#co2|> pivot_longer(c("monthly_average", "interpolated"), values_to="co2", names_to="type")|>
-#ggplot(aes(x = decimal_date, y = co2, col=type)) +
-  #geom_line()+ theme_bw()
+vostok %>%
+  ggplot()+
+  geom_line(aes(x=gas_ageBP, y=CO2_mean))+
+  scale_x_reverse()+
+  ggtitle("Vostok CO2 Concentrations")
 
 ```
 
-- Consider various smoothing windowed averages of the data. 
 
-- Join this series to Mauna Loa data
-
-- Plot joined data
-
-- Describe your conclusions
 
 
 
