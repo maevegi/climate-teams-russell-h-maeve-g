@@ -26,7 +26,7 @@ read_table("https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_mm_mlo.txt",
                                 "interpolated", "days", "std", "uncertainty"),
                   na = c("-1", "-9.99", "-0.99"),
            col_types = "iidddddd")
-
+co2
 ```
 
 
@@ -36,10 +36,8 @@ ggplot(aes(x = decimal_date, y = co2, col=type)) +
   geom_line()+ theme_bw()
 
 ```
+This data represents the monthly observations of atmospheric CO2 concentrations collected from the Mauna Loa Observatory in Hawaii. The data ranges from 1958 to the present. CO2 values fluctuate througought the year as CO2 uptake increases during the growing months of spring and summer and is released again through decomposition in the fall and winter. 
 
-Which months are the CO2 values at the maximum? Minimum?  Why is this?
-
-What rolling average is used in computing the "trend" line?  How does the trend depend on the rolling average?
 
 ------------------------
 
@@ -54,11 +52,7 @@ Data from: <http://climate.nasa.gov/vital-signs/global-temperature>
 Describe the data set to the best of your ability given the documentation provided.  Describe what kind of column each data contains and what units it is measured in.  Then address our three key questions in understanding this data:
 
 - How are the measurements made? What is the associated measurement uncertainty?
-The measurements are collected from NASA's Goddard Institute Institute for Space studies. The data includes the global average surface temperature from 1880 to 2022. The measurements are made as the hange in surface temrpature compared to the average from 1951 to 1980. The measurement uncertainty is Lowess smoothing, which averages the data.
-- What is the resolution of the data?
-The data is measured in annual mean temperature in Celsius. 
-- Are their missing values? How should they be handled?
-The only obvious gap in data is temperature data pre-1880. 
+The measurements displayed are collected from NASA's Goddard Institute Institute for Space studies. The data includes the global average surface temperature from 1880 to 2022. The measurements are made as the change in surface temperature compared to the global average from 1951 to 1980. The measurement uncertainty is Lowess smoothing, which averages the data. The data is measured in annual mean temperature in Celsius. The only obvious gap in data is temperature data pre-1880, since global measurements of temperature were not consistently available.
 
 ## Question 2:
 
@@ -68,7 +62,9 @@ Construct the necessary R code to import and prepare for manipulation the follow
 global_temp<-
 read_table("https://data.giss.nasa.gov/gistemp/graphs/graph_data/Global_Mean_Estimates_based_on_Land_and_Ocean_Data/graph.txt",
            skip=5, 
-           col_names= c("year", "annual_mean", "lowess_smoothing"))
+           col_names= c("year", "annual_mean", "lowess_smoothing"),
+           show_col_types=FALSE)
+
 global_temp
 ```
 
@@ -81,7 +77,7 @@ ggplot(global_temp, aes(x=year))+
          geom_line(mapping=aes(y=annual_mean), col="red")+
          geom_line(mapping=aes(y=lowess_smoothing), col="blue")
 ```
-The graph plots the the annual mean temperature from 1880 to the present. The red line represents the annual mean temperature, while the blue line represents the Lowess smoothing. The data fluctuates consistently between 1880 to around 1930, generally decreasing. However, at around 1930 the mean temperature variation sharply increased, likely due to increased CO2 emissions from intensified production during the two world wars. After this period, the annual mean temperature continued increasing.  
+The graph plots the the annual mean temperature from 1880 to the present. The red line represents the annual mean temperature, while the blue line represents the Lowess smoothing. The data fluctuates consistently between 1880 to around 1930, generally decreasing. However, at around 1930, the mean temperature variation sharply increased, likely due to increased CO2 emissions from intensified production during the two world wars. Greater CO2 emissions led to a stronger greenhoue effect, which therefore increased the global mean temperature. After this period, the annual mean temperature continued increasing.  
 
 
 
@@ -93,14 +89,6 @@ By examining the data here, what evidence do you find or not find for such a pau
 
 What additional analyses or data sources would better help you refine your arguments?
 
-## Question 5: Rolling averages !!!!!!!!!!!!!
-    
-- What is the meaning of "5 year average" vs "annual average"?
-- Construct 5 year averages from the annual data.  Construct 10 & 20-year averages. 
-- Plot the different averages and describe what differences you see and why.  
-
-
-
 # Exercise II: Melting Ice Sheets?
 
 - Data description: <http://climate.nasa.gov/vital-signs/land-ice/>
@@ -108,39 +96,33 @@ What additional analyses or data sources would better help you refine your argum
 
 ## Question 1:
 
-- Describe the data set: what are the columns and units? Where do the numbers come from? 
-The data set represents the amount Antarctic and Greenland ice mass per year. The mass of the ice is measured in gigatons per year. The columns are year, Antarctic mass, and Greenland ice mass. The data comes from NASA's GRACE and GRACE follow-on satellites.
-
-- What is the uncertainty in measurement? Resolution of the data? Interpretation of missing values?
-
+The following data set represents the amount Antarctic and Greenland ice mass per year. The mass of the ice is measured in gigatons per year. The columns are year, Antarctic mass, and Greenland ice mass. The data comes from NASA's GRACE and GRACE follow-on satellites.
+There are some missing values in the data, ranging from around June of 2017 to June of 2018 after the first GRACE mission was ended. It resumed in 2018 when the GRACE Follow-On mission began. The data was collected monthly between 2002 to the present day.  
 
 ## Question 2:
 
 Construct the necessary R code to import this data set as a tidy `Table` object.
 
 ```{r}
-ice <- read_csv("http://climate.nasa.gov/system/internal_resources/details/original/499_GRN_ANT_mass_changes.csv",
+ice_original <- read_csv("http://climate.nasa.gov/system/internal_resources/details/original/499_GRN_ANT_mass_changes.csv",
                 skip=10,
                 col_names=c("decimal_date", "greenland_mass", "antarctic_mass"),
                 col_types="ddd")
-ice
+                
+          
+ice_original
 ```
-
-## Question 3:
-
-Plot the data and describe the trends you observe.
-
-
-
-
 ```{r}
-ggplot(ice, mapping=aes(x= decimal_date)) +
-geom_line(mapping=aes(x = decimal_date, y = greenland_mass, color = greenland_mass)) +
-geom_line(mapping=aes(x = decimal_date, y= antarctic_mass, color = antarctic_mass))
+ice_new<-ice%>%
+  pivot_longer(greenland_mass:antarctic_mass, values_to="ice_mass", names_to="location")
+ice_new
 ```
-
-
-Both plots display small seasonal variations in ice mass as ice melts in the spring and reforms in the winter. However, both plots display an overall decline in ice mass. The Greenland ice mass appears to follow a fairly regular decline, while the Antarctic ice mass data has greater variation. Additionally, the rate of change for the Greenland ice is almost twice as fast as that of the Antarctic ice. 
+```{r}
+ice_new %>%
+  ggplot()+
+  geom_line(aes(x=decimal_date, y=ice_mass, color=location))
+```
+The above data is listed as a table differentiated by the year plotted against Greenland and Antarctic mass. It is then listed again as a consolidated table in order to plot the data. Both locations on the plot display small seasonal variations in ice mass as ice melts in the spring and reforms in the winter. However, both locations display an overall decline in ice mass. The Greenland ice mass appears to follow a fairly regular decline, while the Antarctic ice mass data has greater variation. Additionally, the rate of change for the Greenland ice is almost twice as fast as that of the Antarctic ice. 
 
 # Exercise III: Rising Sea Levels?
 
