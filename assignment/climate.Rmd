@@ -8,7 +8,7 @@ output: github_document
 
 # Unit I: Climate Change Module
 
-## Warm-up exercise: Examining CO2 trends in R
+## Introduction: Examining CO2 trends in R
 
 - Example from <http://climate.nasa.gov/vital-signs/carbon-dioxide/>
 - Raw data from <https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_mm_mlo.txt>
@@ -33,30 +33,29 @@ co2
 ```{r}
 co2|> pivot_longer(c("monthly_average", "interpolated"), values_to="co2", names_to="type")|>
 ggplot(aes(x = decimal_date, y = co2, col=type)) +
-  geom_line()+ theme_bw()
+  geom_line()+ theme_bw()+
+  ggtitle("Atmospheric CO2 Concentrations at the Mauna Loa Observatory ")
 
 ```
-This data represents the monthly observations of atmospheric CO2 concentrations collected from the Mauna Loa Observatory in Hawaii. The data ranges from 1958 to the present. CO2 values fluctuate througought the year as CO2 uptake increases during the growing months of spring and summer and is released again through decomposition in the fall and winter. 
+
+This data represents the monthly observations of atmospheric CO2 concentrations in parts per million (ppm) collected from the Mauna Loa Observatory in Hawaii. The data ranges from 1958 to the present. CO2 values fluctuate throughout the year as CO2 uptake increases during the growing months of spring and summer and is released again through decomposition in the fall and winter. The overall CO2 concentrations appear to be steadily increasing and is currently around 425 ppm. 
 
 
 ------------------------
 
-# Exercise I: Temperature Data
+# Section I: Temperature Data
 
 Each of the last years has consecutively set new records on global climate.  In this section we will analyze global mean temperature data.
 
 Data from: <http://climate.nasa.gov/vital-signs/global-temperature>
 
-## Question 1:
+## Description of the Data:
 
-Describe the data set to the best of your ability given the documentation provided.  Describe what kind of column each data contains and what units it is measured in.  Then address our three key questions in understanding this data:
-
-- How are the measurements made? What is the associated measurement uncertainty?
 The measurements displayed are collected from NASA's Goddard Institute Institute for Space studies. The data includes the global average surface temperature from 1880 to 2022. The measurements are made as the change in surface temperature compared to the global average from 1951 to 1980. The measurement uncertainty is Lowess smoothing, which averages the data. The data is measured in annual mean temperature in Celsius. The only obvious gap in data is temperature data pre-1880, since global measurements of temperature were not consistently available.
 
-## Question 2:
+## Temperature Data Table:
 
-Construct the necessary R code to import and prepare for manipulation the following data set: <http://climate.nasa.gov/system/internal_resources/details/original/647_Global_Temperature_Data_File.txt>
+Data from: <http://climate.nasa.gov/system/internal_resources/details/original/647_Global_Temperature_Data_File.txt>
 
 ```{r}
 global_temp<-
@@ -68,40 +67,29 @@ read_table("https://data.giss.nasa.gov/gistemp/graphs/graph_data/Global_Mean_Est
 global_temp
 ```
 
+## Temperature Data Graph:
 
-## Question 3:
-
-Plot the trend in global mean temperatures over time.  Describe what you see in the plot and how you interpret the patterns you observe.
 ```{r}
 ggplot(global_temp, aes(x=year))+
          geom_line(mapping=aes(y=annual_mean), col="red")+
-         geom_line(mapping=aes(y=lowess_smoothing), col="blue")
+         geom_line(mapping=aes(y=lowess_smoothing), col="blue")+
+         ggtitle("Annual Mean Global Temperature")
 ```
-The graph plots the the annual mean temperature from 1880 to the present. The red line represents the annual mean temperature, while the blue line represents the Lowess smoothing. The data fluctuates consistently between 1880 to around 1930, generally decreasing. However, at around 1930, the mean temperature variation sharply increased, likely due to increased CO2 emissions from intensified production during the two world wars. Greater CO2 emissions led to a stronger greenhoue effect, which therefore increased the global mean temperature. After this period, the annual mean temperature continued increasing.  
+
+This graph plots the the annual mean temperature from 1880 to the present. The red line represents the annual mean temperature, while the blue line represents the values with Lowess smoothing. The data fluctuates consistently between 1880 to around 1910, generally decreasing. However, at around 1930, the mean temperature variation sharply increased, likely due to increased CO2 emissions from intensified production during the two world wars. Greater CO2 emissions led to a stronger greenhouse effect, which therefore increased the global mean temperature. After this period, the annual mean temperature continued increasing.  
 
 
-
-## Question 4: Evaluating the evidence for a "Pause" in warming?
-
-The [2013 IPCC Report](https://www.ipcc.ch/pdf/assessment-report/ar5/wg1/WG1AR5_SummaryVolume_FINAL.pdf) included a tentative observation of a "much smaller increasing trend" in global mean temperatures since 1998 than was observed previously.  This led to much discussion in the media about the existence of a "Pause" or "Hiatus" in global warming rates, as well as much research looking into where the extra heat could have gone.  (Examples discussing this question include articles in [The Guardian](http://www.theguardian.com/environment/2015/jun/04/global-warming-hasnt-paused-study-finds), [BBC News](http://www.bbc.com/news/science-environment-28870988), and [Wikipedia](https://en.wikipedia.org/wiki/Global_warming_hiatus)). 
-
-By examining the data here, what evidence do you find or not find for such a pause?  Present an analysis of this data (using the tools & methods we have covered in Foundation course so far) to argue your case.  
-
-What additional analyses or data sources would better help you refine your arguments?
-
-# Exercise II: Melting Ice Sheets?
+# Section 2: Melting Ice Sheets
 
 - Data description: <http://climate.nasa.gov/vital-signs/land-ice/>
 - Raw data file: <http://climate.nasa.gov/system/internal_resources/details/original/499_GRN_ANT_mass_changes.csv>
 
-## Question 1:
+## Description of the Data:
 
 The following data set represents the amount Antarctic and Greenland ice mass per year. The mass of the ice is measured in gigatons per year. The columns are year, Antarctic mass, and Greenland ice mass. The data comes from NASA's GRACE and GRACE follow-on satellites.
 There are some missing values in the data, ranging from around June of 2017 to June of 2018 after the first GRACE mission was ended. It resumed in 2018 when the GRACE Follow-On mission began. The data was collected monthly between 2002 to the present day.  
 
-## Question 2:
-
-Construct the necessary R code to import this data set as a tidy `Table` object.
+## Data Tables:
 
 ```{r}
 ice_original <- read_csv("http://climate.nasa.gov/system/internal_resources/details/original/499_GRN_ANT_mass_changes.csv",
@@ -120,22 +108,21 @@ ice_new
 ```{r}
 ice_new %>%
   ggplot()+
-  geom_line(aes(x=decimal_date, y=ice_mass, color=location))
+  geom_line(aes(x=decimal_date, y=ice_mass, color=location))+
+  ggtitle("Greenland and Antarctic Ice Mass")
 ```
-The above data is listed as a table differentiated by the year plotted against Greenland and Antarctic mass. It is then listed again as a consolidated table in order to plot the data. Both locations on the plot display small seasonal variations in ice mass as ice melts in the spring and reforms in the winter. However, both locations display an overall decline in ice mass. The Greenland ice mass appears to follow a fairly regular decline, while the Antarctic ice mass data has greater variation. Additionally, the rate of change for the Greenland ice is almost twice as fast as that of the Antarctic ice. 
 
-# Exercise III: Rising Sea Levels?
+The above data is listed as a table listing data by the year with both Greenland and Antarctic ice mass. It is then listed again as a consolidated table in order to plot the data in one graph. Both locations on the plot display small seasonal variations in ice mass as ice melts in the spring and reforms in the winter. However, both locations display an overall decline in ice mass. The Greenland ice mass appears to follow a fairly regular decline, while the Antarctic ice mass data has greater variation. Additionally, the rate of change for the Greenland ice is almost twice as fast as that of the Antarctic ice. 
+
+# Section 3: Sea Level Rise
 
 - Data description: <http://climate.nasa.gov/vital-signs/sea-level/>
 - Raw data file: <http://climate.nasa.gov/system/internal_resources/details/original/121_Global_Sea_Level_Data_File.txt>
 
+## Data Description:
+The following table measures the Global Mean Sea Level (GMSL) variation measured in millimeters every month from 1993 until the present. The data was gathered by the NASA Goddard Space Flight Center and represents a compilation of the Sea Surface Heights from multiple satellites. The original data file contains twelve different columns, including the year, number of observations, weighted observations, and multiple GMSL measurements with different filters applied. For the purposes of our observations, we used the data on the time that the observation was collected, and the the smoothed GMSL variation with the annual and semi-annual signal removed. We chose this data column because it was the same as that used by NASA in their figures. 
 
-## Question 1:
-This table is measuring the Global Mean Sea Level (GMSL) variation measured in millimeters every month from 1993 until the present. The data was gathered by the NASA Goddard Space Flight Center and represents a compilation of teh Sea Surace Heights from multiple satelittes. The original data file contains twelve different columns, including the year, number of obseravations, weighted observations, and mutiple GMSL measurements with different filters applied. For the purposes of our observations, we used the data on the time that the observation was collected, and the the smooth GMSL variation with the annual and semi-annual signal removed. We chose this data column because it was the same as that used by NASA in their figures. 
-
-## Question 2:
-
-Construct the necessary R code to import this data set as a tidy `Table` object.
+## Data Table:
 ```{r}
 sea_level<-read_table("http://climate.nasa.gov/system/internal_resources/details/original/121_Global_Sea_Level_Data_File.txt",
 
@@ -148,28 +135,27 @@ sea_level<-select(sea_level, decimal_date, height_variation)
 sea_level
 ```
 
-## Question 3:
+## Sea Level Graph:
 
-Plot the data and describe the trends you observe.
 ```{r}
 ggplot(data=sea_level)+
-geom_line(mapping=aes(x=decimal_date, y=height_variation), color="orange")
+geom_line(mapping=aes(x=decimal_date, y=height_variation), color="orange")+
+  ggtitle("Sea Level Variation")
 ```
 
-# Exercise IV: Arctic Sea Ice?
+This plot displays the variation in sea level height from a period from 1993 to 2016. The height variation trends upwards, with small seasonal variations. These can possibly be attributed to changes in sea ice mass, as greater ice mass will lower sea level, while more ice melt will raise it.  
 
-- <http://nsidc.org/data/G02135>
-- <ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/N_seaice_extent_daily_v3.0.csv>
+# Section 4: Melting Arctic Sea Ice 
 
+- Data from: <http://nsidc.org/data/G02135>
+- Raw data file: <ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/N_seaice_extent_daily_v3.0.csv>
 
-## Question 1:
+## Data description:
 
-- Describe the data set: what are the columns and units? 
-This data set represents the amount of Arctic sea ice from 1978 to the present. The temporal resolution is 1 day, and the spatial resolution is 25 by 25 km. The data is collected from various sensors operated by the National Snow and Ice Data Center. However, it should be noted that the data is best observed on a monthly scale rather than daily because monthly averages will average errors in the data and represent long-term weather more accurately than daily weather variations. 
+This data set represents the amount of Arctic sea ice from 1978 to the present. The temporal resolution is 1 day, and the spatial resolution is 25 by 25 km. The data is collected from various sensors operated by the National Snow and Ice Data Center. However, it should be noted that the data is best observed on a monthly scale rather than daily because monthly averages will smooth errors in the data and represent long-term weather more accurately than daily weather variations. For this table, the column titled "extent" contains the data for the amount of sea ice present at each observation, which is defined by the year, month, and day of the month that the observation was taken. 
 
-## Question 2:
+## Arctic Ice Data Table:
 
-Construct the necessary R code to import this data set as a tidy `Table` object.
 ```{r}
 arctic_ice <- read_csv("ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/N_seaice_extent_daily_v3.0.csv",
                      skip=2,
@@ -180,37 +166,29 @@ arctic_ice
 ```
 
 
-## Question 3:
+## Arctic Ice Graph:
 
-Plot the data and describe the trends you observe.    
 ```{r}
 arctic_ice |>
   group_by(year) |>
   summarise(mean_extent = mean(extent)) |>
-  ggplot(aes(year, mean_extent)) + geom_line()
+  ggplot(aes(year, mean_extent)) + geom_line()+
+  ggtitle("Arctic Sea Ice Extent")
 ```
-In general, there is an overall decrease in Arctic sea ice surface area. However, there are fluctuations in the data which could be attributed to fluctuations in global climate. For example, the past ten years have been some of the hottest on record. These higher tempertures would mean more sea ice would melt, contributing to these sharp decreases in mean ice extent. There also seems to be a sharp increase in the amount of sea ice in the past three years. 
 
-# Exercise V: Longer term trends in CO2 Records
+In general, there is an overall decrease in Arctic sea ice surface area. However, there are fluctuations in the data which could be attributed to fluctuations in global climate. For example, the past ten years have been some of the hottest on record. These higher temperatures would mean more sea ice would melt, contributing to these sharp decreases in mean ice extent. There also seems to be a sharp increase in the amount of sea ice in the past three years. We are uncertain as to the reason for this increase. 
 
-The data we analyzed in the unit introduction included CO2 records dating back only as far as the measurements at the Manua Loa observatory.  To put these values into geological perspective requires looking back much farther than humans have been monitoring atmosopheric CO2 levels.  To do this, we need another approach.
+# Section 5: Paleoclimatic CO2 Records
+The previous sections explored climatic data from relatively recent time scales. In order to determine whether these climatic fluctuations are part of a longer-term pattern or if they simply represent insignificant change, it is necessary to examine historical climatic records. The Vostok ice core provides data of the composition of the atmosphere dating back 400,000 years and can provide a record against which we can compare current trends. However, examining a data set of this size can be difficult. For the purposes of this report, we examined ice core data dating back to 163,670 years before the present day. 
 
-[Ice core data](http://cdiac.ornl.gov/trends/co2/ice_core_co2.html):
-
-Vostok Core, back to 400,000 yrs before present day 
-
-- Description of data set: <http://cdiac.esd.ornl.gov/trends/co2/vostok.html>
-- Data source: <http://cdiac.ornl.gov/ftp/trends/co2/vostok.icecore.co2>
-https://www.ncei.noaa.gov/pub/data/paleo/icecore/antarctica/vostok/vostok_co2.txt
-
-## Questions / Tasks:
-
-- Describe the data set: what are the columns and units? Where do the numbers come from? 
+Data file: https://www.ncei.noaa.gov/pub/data/paleo/icecore/antarctica/vostok/co2-noaa.txt
 
 
-- What is the uncertainty in measurement? Resolution of the data? Interpretation of missing values?
+## Description of the Data:
 
-- Read in and prepare data for analysis.
+The data set we found includes the depth of the measurement, the age of the ice in years before present (BP), the age of the gas (BP), and the minimum, maximum, and mean CO2 concentration values. These measurements are all from the Vostok core in Antarctica and represents climatic data from the last 160,000 years, with the latest date being 1700 BP. According to the NCEI, the data fluctuates in accordance with glacial and interglacial cycles, with a shorter term CO2 cyclical period of around 21,000 years. 
+
+# Vostok Core Data Table
 ```{r}
 vostok<- read_table("https://www.ncei.noaa.gov/pub/data/paleo/icecore/antarctica/vostok/co2-noaa.txt",
                   comment="#", 
@@ -219,7 +197,7 @@ vostok<- read_table("https://www.ncei.noaa.gov/pub/data/paleo/icecore/antarctica
                   arrange(desc(gas_ageBP))
 vostok
 ```
-
+# Vostok Ice Core CO2 Concentrations
 ```{r}
 vostok %>%
   ggplot()+
@@ -229,7 +207,8 @@ vostok %>%
 
 ```
 
+As stated above, the data from the Vostok core fluctuates in accordance with glacial and interglacial cycles, which help explain the variation in CO2 concentrations. This 100,000 year cycle is superimposed on a shorter cycle of CO2 fluctuations which occurs over a 21,000 year period. The age of the gas is represent on the x-axis as years before present, arranged so that the most recent year, around 1700 BP, is furthest to the right. The oldest measurements, therefore, are furthest on the left. A direct comparison of this data to observations recorded at the Mauna Loa Observatory is not possible given the data available, since the classification of time, mainly the system used to measure years, is different. However, the increase in CO2 concentrations in both graphs is apparent. While it may be difficult to determine more recent CO2 increases in the Vostok data, the Mauna Loa graph clearly represents recent increases in CO2. 
 
+# Concluding Observations
 
-
-
+The data sets analyzed here represent several indicators of climate change. Overall, we observed increases in atmospheric CO2, increased global mean temperature, decreased Antarctic and Greenland ice, higher sea levels, and decreases in Arctic sea ice. Together, these trends point towards larger-scale changes in climate patterns. Although we do not have a comprehensive set of data here, these markers are typically used as evidence that anthropogenic CO2 emissions contribute to global warming due to the greenhouse effect. Although there are small seasonal variations in some of the measurements, they still display an overall trend towards a warmer climate.  
