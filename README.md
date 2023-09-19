@@ -5,11 +5,10 @@ explore global temperature data to understand how the earth's climate is warming
 
 ## assignment
 
-All work for this assignment is in the `assignment` directory.  Code is contained in the `climate.Rmd` notebook, and final rendered output files (`climate.md` and associated files) are in the `assignment` directory as well. The general rubric you will be graded on is found in the `Rubric.md` file. 
+The assignment file can be found at this link: 
+https://github.com/espm-157/climate-teams-russell-h-maeve-g/blob/194ae51e758a4f0751b76146ba0debe935f68796/assignment/climate.md.
+All work for this assignment is in the `assignment` directory.  Code is contained in the `climate.Rmd` notebook, and final rendered output files (`climate.md` and associated files) are in the `assignment` directory as well. The general rubric you will be graded on is found in the `Rubric.md` file.  
 
-## Special files
-
-Additionally this repository, and all team repositories, includes most of the special files found here:
 
 ### Common files
 
