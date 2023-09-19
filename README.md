@@ -4,7 +4,7 @@ This repository contains all of the files for the climate indicators report, whi
 
 ## assignment
 
-The assignment file can be found at this link: assignment/climate.md. All work for this assignment is in the `assignment` directory.  Code is contained in the `climate.Rmd` notebook, and final rendered output files (`climate.md` and associated files) are in the `assignment` directory as well.  
+The assignment file can be found at this path: assignment/climate.md and this link: https://github.com/espm-157/climate-teams-russell-h-maeve-g/blob/2bf14c353322d1bee453e1f030cbe8e9b665f351/assignment/climate.md.  All work for this assignment is in the `assignment` directory.  Code is contained in the `climate.Rmd` notebook, and final rendered output files (`climate.md` and associated files) are in the `assignment` directory as well.  
 
 
 ### Other files
